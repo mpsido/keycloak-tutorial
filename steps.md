@@ -39,7 +39,9 @@ You can also do it with a single docker command:
 docker run --rm -p 8080:8080 -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin123 -it jboss/keycloak
 ```
 
-Step 2: go to [localhost:8080](localhost:8080) (you may need to wait a few minutes). Then, go the admin console.
+Step 2: go to [localhost:8080](localhost:8080) (you may need to wait a few minutes until the server is ready to listen). Then, go the admin console.
+
+*Remark*: user and passord are those that you specified in the environment variables you pass with the docker command (admin/admin123).
 
 Create a "realm": a realm is a sort of namespace where the permissions are managed.
 
@@ -50,3 +52,30 @@ Remark: you could do it from the default "master" realm, but prefer reserving th
 Hover the name of your current realm "Master" on the top left corner of keycloak console. Then click the "Add realm" button that you will see apearing.
 
 For the rest of this tutorial I am going to call that realm: "myrealm".
+
+### Serve a protected application
+
+In this step we are going to serve a simple node.js application an protect some endpoints using keycloak.
+
+First we are going to create a client application in the keycloak console.
+
+Select your realm when go to the Clients tab (panel on the left).
+
+Hit the "Create" button. Call your client any name but for the rest of the tutuorial we are going to assume you called it: "myclient".
+
+As root url you can input: http://localhost:5000. This is the domain that your user will have to input in their browser url bar to access your application.
+
+It is important that this domain is the same as the one where you are serving your application. During user authentication, keycloak will check that the "redirect url" and "origin" match this domain.
+
+This tutorial provides a simple application listening on http://localhost:5000
+
+You just need to install the dependencies.
+```bash
+cd backend-client
+npm install
+```
+
+Before you start the application, have a look at index.js.
+
+Check that the kcConfig match the json content you will see in the Installation tab of your keycloak console (top right).
+
