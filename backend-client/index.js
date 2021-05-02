@@ -24,7 +24,14 @@ app.use(session({
   saveUninitialized: true,
   store: memoryStore
 }));
+
+// Very important:
+// the middleware is in charge of exchanging the authentication code for an authentication token and set it in the cookies
 app.use(keycloak.middleware());
+
+// Not necessary because "By default, the middleware catches calls to /logout"
+// See documentation here: https://www.keycloak.org/docs/latest/securing_apps/index.html#additional-urls
+// app.use( keycloak.middleware( { logout: '/logout' } ));
 
 app.get('/', (req, res, next) => {
   try {
@@ -33,9 +40,9 @@ app.get('/', (req, res, next) => {
         res.status(500);
         res.send(err);
         return;
-      } 
-      res.writeHeader(200, {"Content-Type": "text/html"});  
-      res.write(html);  
+      }
+      res.writeHeader(200, {"Content-Type": "text/html"});
+      res.write(html);
       res.end();
     });
   }
@@ -47,7 +54,22 @@ app.get('/', (req, res, next) => {
 
 app.get( '/private', keycloak.protect(), (req, res, next) => {
     console.log('privateHandler');
-    res.send('private');
+    try {
+      fs.readFile('./private.html', function (err, html) {
+        if (err) {
+          res.status(500);
+          res.send(err);
+          return;
+        }
+        res.writeHeader(200, {"Content-Type": "text/html"});
+        res.write(html);
+        res.end();
+      });
+    }
+    catch (err) {
+      res.status(500);
+      res.send(err);
+    };
 });
 
 app.get( '/public', (req, res, next) => {
