@@ -1,6 +1,7 @@
 const express = require("express");
 const session = require('express-session');
 const Keycloak = require('keycloak-connect');
+const fs = require('fs');
 
 const memoryStore = new session.MemoryStore();
 
@@ -23,6 +24,25 @@ app.use(session({
   saveUninitialized: true,
   store: memoryStore
 }));
+
+app.get('/', (req, res, next) => {
+  try {
+    fs.readFile('./index.html', function (err, html) {
+      if (err) {
+        res.status(500);
+        res.send(err);
+        return;
+      } 
+      res.writeHeader(200, {"Content-Type": "text/html"});  
+      res.write(html);  
+      res.end();
+    });
+  }
+  catch (err) {
+    res.status(500);
+    res.send(err);
+  };
+});
 
 app.get( '/private', keycloak.protect(), (req, res, next) => {
     console.log('privateHandler');
