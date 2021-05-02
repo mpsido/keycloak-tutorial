@@ -53,7 +53,7 @@ app.get('/', (req, res, next) => {
 });
 
 app.get( '/private', keycloak.protect(), (req, res, next) => {
-    console.log('privateHandler');
+    console.log('privateHandler Bearer token:\n', req.kauth.grant.access_token.token);
     try {
       fs.readFile('./private.html', function (err, html) {
         if (err) {
