@@ -24,6 +24,7 @@ app.use(session({
   saveUninitialized: true,
   store: memoryStore
 }));
+app.use(keycloak.middleware());
 
 app.get('/', (req, res, next) => {
   try {
@@ -47,13 +48,11 @@ app.get('/', (req, res, next) => {
 app.get( '/private', keycloak.protect(), (req, res, next) => {
     console.log('privateHandler');
     res.send('private');
-    next(req, res);
 });
 
 app.get( '/public', (req, res, next) => {
     console.log('publicHandler');
     res.send('public');
-    next(req, res);
 });
 
 app.listen(process.env.PORT || 5000);
