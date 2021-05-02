@@ -131,6 +131,32 @@ Once the user is created go to his "credentials tab". And set his password.
 * **Password**: myuser123
 * **Password Confirmation**: myuser123
 
-#### Log in a myuser
+#### Log in as myuser
 
 Go to your [localhost:5000/private](http://localhost:5000/private) page.
+
+Now you should be able to login with the user/password you set above.
+
+*Remark*: the first time you do it keycloak will ask you to reset your password.
+
+*Remark*: you could have disabled the "reset password prompt" by disable the "Temporary" option in the user's credential tab.
+
+#### Enable user self registration
+
+In your realm you can optionally enable the possibility for users to register themselves in your application.
+
+Go to "Realm settings" > "[Login](http://localhost:8080/auth/admin/master/console/#/realms/myrealm/login-settings)" tab.
+
+Toggle ON "User registration".
+
+Don't forget to hit the "Save" button.
+
+#### Try self registration
+
+Go back to your private page: [localhost:5000/private](http://localhost:5000/private).
+
+Logout if you are logged in, then [try to login again]([localhost:5000/private](http://localhost:5000/private)).
+
+You will see a "Register" link appear at the bottom (it wasn't here before).
+
+Let keycloak guide you: fill the form, and that's it you have created a new user that you can use later for accessing the private endpoint.
