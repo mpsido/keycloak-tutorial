@@ -9,8 +9,10 @@ const kcConfig = {
   "realm": "myrealm",
   "auth-server-url": "http://localhost:8080/auth/",
   "ssl-required": "external",
-  "resource": "myclient",
-  "public-client": true,
+  "resource": "web-auth-backend",
+  "credentials": {
+    "secret": "6d6d616f-016f-460a-9a40-9348dd3eac5b"
+  },
   "confidential-port": 0
 };
 
@@ -19,7 +21,7 @@ const keycloak = new Keycloak({ store: memoryStore, idpHint: 'http://localhost:8
 const app = express();
 
 app.use(session({
-  secret: '5dd9de66-ec05-470a-b46d-98803f2daa9e',
+  secret: 'some-random-secret-that-has-nothing-to-do-with-keycloak',
   resave: false,
   saveUninitialized: true,
   store: memoryStore
